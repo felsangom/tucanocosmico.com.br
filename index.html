@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tucano Cósmico | Game Studio</title>
+    <meta name="description" content="Estúdio de desenvolvimento de jogos independentes. Onde a criatividade decola.">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --space-black: #050505;
+            --nebula-purple: #240b36;
+            --toucan-orange: #ff9f1c;
+            --starlight: #ffffff;
+            --neon-blue: #00f3ff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--space-black);
+            background: radial-gradient(circle at bottom, var(--nebula-purple) 0%, var(--space-black) 70%);
+            color: var(--starlight);
+            font-family: 'Roboto', sans-serif;
+            height: 100vh;
+            overflow: hidden; /* Evita scroll bars pelo canvas */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        /* Canvas para o efeito de estrelas */
+        #starfield {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .container {
+            z-index: 1;
+            padding: 2rem;
+            max-width: 800px;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 4rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(90deg, var(--toucan-orange), var(--neon-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 20px rgba(0, 243, 255, 0.3);
+        }
+
+        p.tagline {
+            font-size: 1.5rem;
+            font-weight: 300;
+            margin-bottom: 2rem;
+            color: #ccc;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 12px 30px;
+            border: 2px solid var(--neon-blue);
+            color: var(--neon-blue);
+            text-decoration: none;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-button:hover {
+            background-color: var(--neon-blue);
+            color: var(--space-black);
+            box-shadow: 0 0 30px var(--neon-blue);
+        }
+
+        footer {
+            position: absolute;
+            bottom: 20px;
+            font-size: 0.8rem;
+            opacity: 0.6;
+        }
+
+        /* Animação de flutuação para o container */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+
+        /* Responsividade básica */
+        @media (max-width: 600px) {
+            h1 { font-size: 2.5rem; }
+            p.tagline { font-size: 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="starfield"></canvas>
+
+    <div class="container">
+        <div style="font-size: 4rem; margin-bottom: 1rem;">🦜🚀</div>
+        
+        <h1>Tucano Cósmico</h1>
+        <p class="tagline">Jogos que voam além da estratosfera.</p>
+        
+        <a href="#" class="cta-button">Em Breve</a>
+    </div>
+
+    <footer>
+        &copy; 2026 Tucano Cósmico Studios. Todos os direitos reservados.<br>
+        Chapecó, Terra, Via Láctea.
+    </footer>
+
+    <script>
+        // Script simples para gerar estrelas aleatórias no Canvas
+        const canvas = document.getElementById('starfield');
+        const ctx = canvas.getContext('2d');
+
+        let width, height, stars;
+
+        function init() {
+            resize();
+            createStars();
+            loop();
+        }
+
+        function resize() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        }
+
+        function createStars() {
+            stars = [];
+            const count = 200; // Quantidade de estrelas
+            for (let i = 0; i < count; i++) {
+                stars.push({
+                    x: Math.random() * width,
+                    y: Math.random() * height,
+                    size: Math.random() * 2,
+                    speed: Math.random() * 0.5
+                });
+            }
+        }
+
+        function updateStars() {
+            for (let star of stars) {
+                star.y -= star.speed; // Movimento para cima (como se a nave descesse)
+                if (star.y < 0) {
+                    star.y = height;
+                    star.x = Math.random() * width;
+                }
+            }
+        }
+
+        function drawStars() {
+            ctx.clearRect(0, 0, width, height);
+            ctx.fillStyle = 'white';
+            for (let star of stars) {
+                ctx.beginPath();
+                ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function loop() {
+            updateStars();
+            drawStars();
+            requestAnimationFrame(loop);
+        }
+
+        window.addEventListener('resize', () => {
+            resize();
+            createStars();
+        });
+
+        init();
+    </script>
+</body>
+</html>
