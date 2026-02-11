@@ -1,1 +1,0 @@
-# tucanocosmico.com.br
